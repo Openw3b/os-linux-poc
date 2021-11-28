@@ -30,6 +30,8 @@ RUN echo 'exec --no-startup-id /opt/app.sh' >> /etc/i3/config
 COPY files/.xinitrc /home/user/.xinitrc
 COPY files/.bash_profile /home/user/.bash_profile
 
+RUN apt install -y net-tools iproute2
+
 #COPY files/app.service /etc/systemd/system/app.service
 #COPY files/app.service /lib/systemd/system/app.service
 #RUN chmod 644 /etc/systemd/system/app.service
