@@ -8,4 +8,8 @@ chown -R user:user /home/user
 echo "root:password" | chpasswd
 echo "user:password" | chpasswd
 
+chown user:user /dev/wl0
+export XDG_RUNTIME_DIR=/tmp/wayland
+mkdir -p $XDG_RUNTIME_DIR
+
 exec /sbin/init

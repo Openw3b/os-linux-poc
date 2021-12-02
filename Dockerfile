@@ -30,9 +30,23 @@ RUN echo 'exec --no-startup-id /opt/app.sh' >> /etc/i3/config
 COPY files/.xinitrc /home/user/.xinitrc
 COPY files/.bash_profile /home/user/.bash_profile
 
-RUN apt install -y net-tools iproute2
+RUN apt install -y net-tools iproute2 inetutils-ping
 
-#COPY files/app.service /etc/systemd/system/app.service
-#COPY files/app.service /lib/systemd/system/app.service
-#RUN chmod 644 /etc/systemd/system/app.service
-#RUN systemctl enable app
+# GUI fixes
+RUN apt install -y git meson build-essential libwayland-dev \
+    cmake pkg-config libgbm-dev libdrm-dev libpixman-1-dev \
+    libx11-xcb-dev libxcb-composite0-dev libxkbcommon-dev libgtest-dev
+RUN git clone https://chromium.googlesource.com/chromiumos/platform2
+RUN cd platform2/vm_tools/sommelier && meson build && sudo ninja -C build install
+RUN mkdir -p /opt/google/cros-containers/bin/
+RUN ln -s /usr/bin/Xwayland /opt/google/cros-containers/bin/Xwayland
+ENV XDG_RUNTIME_DIR=/tmp/wayland
+# RUN echo "nameserver 1.1.1.1" > /etc/resolv.conf
+
+COPY files/start_app.sh /opt/start_app.sh
+RUN chmod a+x /opt/start_app.sh
+
+COPY files/app.service /etc/systemd/system/app.service
+COPY files/app.service /lib/systemd/system/app.service
+RUN chmod 644 /etc/systemd/system/app.service
+RUN systemctl enable app

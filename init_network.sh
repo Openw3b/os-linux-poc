@@ -10,7 +10,7 @@ sudo ip addr add dev enp0s4 10.1.1.2/24
 sudo ip link set up dev enp0s4
 sudo ip route add default via 10.1.1.1 dev enp0s4
 
-sudo echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+su root -c 'echo "nameserver 1.1.1.1" > /etc/resolv.conf'
 
 ## Run this on the host
 
@@ -28,3 +28,15 @@ cd platform2/vm_tools/sommelier
 sudo apt install -y libwayland-dev cmake pkg-config libgbm-dev libdrm-dev libpixman-1-dev libx11-xcb-dev libxcb-composite0-dev libxkbcommon-dev libgtest-dev
 meson build
 sudo ninja -C build install
+
+
+
+# run wayland
+sudo chown user:user /dev/wl0
+export XDG_RUNTIME_DIR=/tmp/wayland
+mkdir -p $XDG_RUNTIME_DIR
+export MOZ_ENABLE_WAYLAND=1
+
+sudo mkdir -p /opt/google/cros-containers/bin/
+sudo ln -s /usr/bin/Xwayland /opt/google/cros-containers/bin/Xwayland
+sommelier firefox
