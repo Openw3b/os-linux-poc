@@ -1,0 +1,40 @@
+FROM alpine
+
+# Todo: Remove build dependencies from VM
+# Build Sommelier
+RUN apk add git
+RUN git clone https://chromium.googlesource.com/chromiumos/platform2 
+RUN apk add meson gcc make wayland-dev cmake mesa-dev pixman-dev libxkbcommon-dev gtest-dev build-base
+RUN export PATH=$PATH:/usr/libexec/gcc/x86_64-alpine-linux-musl/10.3.1 && \
+    cd platform2/vm_tools/sommelier && \
+    meson build && ninja -C build install
+RUN mkdir -p /opt/google/cros-containers/bin/
+RUN ln -s /usr/bin/Xwayland /opt/google/cros-containers/bin/Xwayland
+
+# RUN passwd -d root ''
+RUN addgroup -g 1000 -S user
+RUN adduser -u 1000 -G user -h /home/user -D user
+RUN addgroup user wheel
+COPY files/init_alpine /etc/local.d/init_app.start
+RUN chmod +x /etc/local.d/init_app.start
+
+# Install apps
+RUN apk add firefox mesa-egl xwayland sudo ttf-freefont
+
+# OpenRC
+RUN apk add dhclient openrc util-linux
+RUN rm -f /sbin/init && ln -s /sbin/openrc-init /sbin/init
+
+# Get TTY
+RUN echo 'agetty_options="--autologin root --noclear"' > /etc/conf.d/agetty-autologin
+RUN ln -s /etc/init.d/agetty /etc/init.d/agetty-autologin.ttyS0 
+RUN rc-update add agetty-autologin.ttyS0 default
+RUN rc-update add local default
+
+# COPY files/start_app.sh /opt/start_app.sh
+# RUN chmod a+x /opt/start_app.sh
+
+# COPY files/app.service /etc/systemd/system/app.service
+# COPY files/app.service /lib/systemd/system/app.service
+# RUN chmod 644 /etc/systemd/system/app.service
+# RUN systemctl enable app

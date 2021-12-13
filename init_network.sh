@@ -5,11 +5,11 @@ exit
 
 
 # Run this inside guest vm
-sudo ip addr flush dev enp0s4
+sudo ip addr del dev enp0s4 169.254.177.42/16
+# sudo ip addr flush dev enp0s4
 sudo ip addr add dev enp0s4 10.1.1.2/24
-sudo ip link set up dev enp0s4
+# sudo ip link set up dev enp0s4
 sudo ip route add default via 10.1.1.1 dev enp0s4
-
 su root -c 'echo "nameserver 1.1.1.1" > /etc/resolv.conf'
 
 ## Run this on the host

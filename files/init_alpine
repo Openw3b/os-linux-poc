@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Configure network
+ip link set up dev eth0
+ip addr add dev eth0 10.1.1.2/24
+ip route add default via 10.1.1.1
+echo "nameserver 1.1.1.1" > /etc/resolv.conf
+
+export XDG_RUNTIME_DIR=/usr/run/1000
+/platform2/vm_tools/sommelier/build/sommelier -X vlc
+
+# Todo: Graceful shutdown
+# echo 1 > /proc/sys/kernel/sysrq; echo o > /proc/sysrq-trigger
