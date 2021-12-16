@@ -2,14 +2,9 @@
 echo "vm" > /etc/hostname
 echo "127.0.0.1    localhost vm" > /etc/hosts
 
-useradd -s /bin/bash -d /home/user/ -m -G sudo user
-chown -R user:user /home/user
-
 echo "root:password" | chpasswd
 echo "user:password" | chpasswd
 
-# chown user:user /dev/wl0
-# export XDG_RUNTIME_DIR=/tmp/wayland
-# mkdir -p $XDG_RUNTIME_DIR
+echo nameserver 8.8.8.8 > /etc/resolv.conf
 
 exec /sbin/init

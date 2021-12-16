@@ -1,21 +1,8 @@
-#!/bin/bash
-
-qemu-system-x86_64-spice -machine vmport=off \
-   -enable-kvm -cpu host -m 1024m -smp 4 \
-   -kernel bzImage \
-   -append "root=/dev/vda rw init=/init" \
-   -drive id=root,file=./fs/firefox.qcow2,format=qcow2,if=none \
-   -device virtio-rng-pci \
-   -device virtio-blk-pci,drive=root \
-   -nic user,model=virtio \
-   -vga virtio \
-   -soundhw hda \
-   -device virtio-tablet-pci,id=input2,bus=pci.0,addr=0x9 -spice port=0,disable-ticketing,image-compression=off,seamless-migration=on \
-   -spice unix,addr=vm.sock,disable-ticketing  \
-   -device virtio-serial -chardev spicevmc,id=vdagent,debug=0,name=vdagent \
-   -device virtserialport,chardev=vdagent,name=com.redhat.spice.0 \
-   -monitor unix:monitor.sock,server,nowait
-
-   
-# remote-viewer spice+unix://vm.sock
-   
+../crosvm/target/debug/crosvm run -c 8 -m 4096 --disable-sandbox \
+  --gpu backend=2d \
+  --host_ip=10.1.1.3 --netmask 255.255.255.0 --mac 70:5a:0f:2f:16:4e \
+  --rwroot fs.qcow2 \
+  --display-window-keyboard --display-window-mouse \
+  -p 'init=/init' \
+  --socket vm.sock \
+  bzImage

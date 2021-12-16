@@ -3,8 +3,8 @@ Description=Start GUI Application
 
 [Service]
 Type=simple
-ExecStart=/opt/start_app.sh
+ExecStart=/usr/bin/xinit /usr/bin/i3 -c /etc/i3/config
 
 [Install]
-After=network.online.target
+After=getty@tty1.service
 WantedBy=multi-user.target
