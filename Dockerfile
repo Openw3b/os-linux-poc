@@ -22,28 +22,25 @@ RUN apt-get install -y netplan.io nano
 COPY files/netplan.yaml /etc/netplan/00-default.yaml
 RUN systemctl disable dhcpcd
 
-#RUN unlink /etc/resolv.conf && \
-#    ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf && \
-#    systemctl restart systemd-resolved.service
-
 RUN useradd -s /bin/bash -d /home/user/ -m -G sudo user
 RUN chown -R user:user /home/user
 
 #COPY files/xrandrloop.sh /opt/xrandrloop.sh
 #RUN chmod +x /opt/xrandrloop.sh
 
-#RUN mkdir -p /etc/systemd/system/getty@tty1.service.d
-#COPY files/override.conf /etc/systemd/system/getty@tty1.service.d/override.conf
+RUN mkdir -p /etc/systemd/system/getty@tty1.service.d
+COPY files/override.conf /etc/systemd/system/getty@tty1.service.d/override.conf
 
-#COPY files/config /etc/i3/config
-#RUN echo $COMMAND' & while [[ -d /proc/$! ]]; do sleep 1; done; echo 2' > /opt/app.sh
-#RUN chmod +x /opt/app.sh
-#RUN echo 'exec --no-startup-id /opt/app.sh' >> /etc/i3/config
+COPY files/config /etc/i3/config
+
+RUN echo $COMMAND > /opt/app.sh
+RUN chmod +x /opt/app.sh
+RUN echo 'exec --no-startup-id /opt/app.sh' >> /etc/i3/config
 
 #COPY files/.xinitrc /home/user/.xinitrc
 #COPY files/.bash_profile /home/user/.bash_profile
 
-#COPY files/app.service /etc/systemd/system/app.service
-#COPY files/app.service /lib/systemd/system/app.service
-#RUN chmod 644 /etc/systemd/system/app.service
-#RUN systemctl enable app
+COPY files/app.service /etc/systemd/system/app.service
+COPY files/app.service /lib/systemd/system/app.service
+RUN chmod 644 /etc/systemd/system/app.service
+RUN systemctl enable app

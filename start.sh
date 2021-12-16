@@ -1,8 +1,12 @@
+export QT_SCALE_FACTOR=2
+export GDK_SCALE=2
+
 ../crosvm/target/debug/crosvm run -c 8 -m 4096 --disable-sandbox \
-  --gpu backend=2d \
+  --gpu backend=2d,height=1080,width=1920 \
   --host_ip=10.1.1.3 --netmask 255.255.255.0 --mac 70:5a:0f:2f:16:4e \
-  --rwroot fs.qcow2 \
-  --display-window-keyboard --display-window-mouse \
-  -p 'init=/init' \
+  --rwroot fs/fs.qcow2 \
+  --display-window-keyboard \
+  -p 'init=/init net.ifnames=0' \
   --socket vm.sock \
+  --evdev /dev/input/event24 \
   bzImage
