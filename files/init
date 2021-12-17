@@ -7,4 +7,5 @@ echo "user:password" | chpasswd
 
 echo nameserver 8.8.8.8 > /etc/resolv.conf
 
+mount -t virtiofs shared /mnt
 exec /sbin/init
