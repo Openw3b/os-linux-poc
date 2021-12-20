@@ -1,0 +1,10 @@
+#! /bin/sh
+
+echo 'nameserver 1.1.1.1' > /etc/resolv.conf
+
+# Configure network from kernel args
+ifconfig eth0 up $1 netmask $2
+ip route add default via $3
+ifconfig eth1 up $4 netmask $5
+
+exec /sbin/init

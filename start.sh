@@ -1,10 +1,11 @@
 ../crosvm/target/debug/crosvm run -c 8 -m 4096 --disable-sandbox \
   --gpu backend=2d,height=1080,width=1920 \
-  --host_ip=10.1.1.3 --netmask 255.255.255.0 --mac 70:5a:0f:2f:16:4e \
+  --tap-name tap_appvm1_in \
   --rwroot fs/fs.qcow2 \
   --display-window-keyboard \
-  -p 'init=/init net.ifnames=0' \
+  -p 'init=/init net.ifnames=0 ip=10.99.1.2::10.99.1.1:255.255.255.0::eth0:off' \
   --socket vm.sock \
-  --evdev /dev/input/event24 \
-  --shared-dir shared:shared:type=fs \
+  --vhost-net \
   ../linux-5.15.8/arch/x86/boot/bzImage
+
+#  --shared-dir shared:shared:type=fs \

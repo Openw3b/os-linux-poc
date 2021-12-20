@@ -15,7 +15,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y $PACKAGES
 COPY files/init /init
 RUN chmod +x /init
 
-COPY files/netplan.yaml /etc/netplan/00-default.yaml
+#COPY files/netplan.yaml /etc/netplan/00-default.yaml
 RUN systemctl disable dhcpcd
 
 RUN useradd -s /bin/bash -d /home/user/ -m -G sudo user
@@ -33,8 +33,10 @@ COPY files/.xinitrc /home/user/.xinitrc
 COPY files/config /etc/i3/config
 COPY files/.bash_profile /home/user/.bash_profile
 
+# Choose with or without file
 #RUN echo $COMMAND /mnt/example.mp4 > /opt/app.sh
 RUN echo $COMMAND > /opt/app.sh
+
 RUN chmod +x /opt/app.sh
 RUN echo 'exec --no-startup-id /opt/app.sh' >> /etc/i3/config
 
@@ -43,3 +45,5 @@ RUN echo 'exec --no-startup-id /opt/app.sh' >> /etc/i3/config
 #COPY files/app.service /lib/systemd/system/app.service
 #RUN chmod 644 /etc/systemd/system/app.service
 #RUN systemctl enable app
+
+RUN apt install -y ethtool pciutils
