@@ -193,4 +193,7 @@ bindsym Mod1+r mode "resize"
 #}
 
 for_window [class="^.*"] border pixel 0
+for_window [class="^.*"] floating enable
+for_window [class="Firefox"] move position 0 0
+for_window [class="Firefox"] resize set 768 768
 

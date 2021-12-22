@@ -6,6 +6,6 @@
   -p 'init=/init net.ifnames=0 ip=10.99.1.2::10.99.1.1:255.255.255.0::eth0:off' \
   --socket vm.sock \
   --vhost-net \
-  ../linux-5.15.8/arch/x86/boot/bzImage
+  bzImage
 
 #  --shared-dir shared:shared:type=fs \

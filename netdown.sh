@@ -1,6 +1,8 @@
+WAN=enp2s0
+
 # Disable NAT
-sudo /sbin/iptables -D FORWARD -i enp2s0 -o tap_netvm1_in -m state --state RELATED,ESTABLISHED -j ACCEPT
-sudo /sbin/iptables -D FORWARD -o enp2s0 -i tap_netvm1_in -j ACCEPT
+sudo /sbin/iptables -D FORWARD -i $WAN -o tap_netvm1_in -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo /sbin/iptables -D FORWARD -o $WAN -i tap_netvm1_in -j ACCEPT
 
 # Delete a briddge after removing interfaces
 sudo brctl delif br_appvm1_netvm1 tap_appvm1_in

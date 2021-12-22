@@ -4,4 +4,4 @@
   --tap-name tap_netvm1_in \
   --tap-name tap_netvm1_out \
   --socket netvm.sock \
-  ../linux-5.15.8/arch/x86/boot/bzImage
+  bzImage
